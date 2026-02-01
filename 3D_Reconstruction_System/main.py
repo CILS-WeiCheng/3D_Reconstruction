@@ -7,7 +7,7 @@ def example_stereo_reconstruction():
     print("=== 啟動 3D 重建系統範例 ===")
     
     # 1. 初始化系統 (路徑由 config 提供)
-    system = StereoVisionSystem(
+    system = StereoVisionSystem(z
         left_calib=config.LEFT_NPZ,
         right_calib=config.RIGHT_NPZ,
         stereo_calib=config.STEREO_NPZ
