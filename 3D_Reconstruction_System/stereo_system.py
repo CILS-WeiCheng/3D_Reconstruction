@@ -121,10 +121,10 @@ class StereoVisionSystem:
             if mag_y + zoom_size > img.shape[0]: mag_y = y - zoom_size - 20
             
             mag_x, mag_y = max(0, min(mag_x, img.shape[1] - zoom_size)), max(0, min(mag_y, img.shape[0] - zoom_size))
-            tmp_disp[mag_y:mag_y+zoom_size, mag_x:mag_x+zoom_size] = zoomed
-            cv2.rectangle(tmp_disp, (mag_x, mag_y), (mag_x+zoom_size, mag_y+zoom_size), (255, 255, 0), 2)
+            img_disp[mag_y:mag_y+zoom_size, mag_x:mag_x+zoom_size] = zoomed
+            cv2.rectangle(img_disp, (mag_x, mag_y), (mag_x+zoom_size, mag_y+zoom_size), (255, 255, 0), 2)
             
-        cv2.imshow(win_name, tmp_disp)
+        cv2.imshow(win_name, img_disp)
 
     def _redraw_points(self, img, img_disp, points, win_name):
         """重新繪製所有選取的點"""
