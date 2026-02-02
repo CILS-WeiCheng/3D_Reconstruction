@@ -2,8 +2,7 @@ import cv2
 import numpy as np
 from typing import Dict, List, Tuple, Optional
 import matplotlib.pyplot as plt
-
-from . import config, util, data_io, core_math, visualizer
+import config, util, data_io, core_math, visualizer
 
 class StereoVisionSystem:
     """雙目視覺系統，整合資料處理、計算與視覺化"""
@@ -93,14 +92,48 @@ class StereoVisionSystem:
         return points
 
     def _draw_magnifier(self, img, img_disp, points, x, y, win_name):
-        # 放大鏡繪製邏輯 (原 3Dprojection.py L180-225)
-        # 為了保持簡潔，這裡省略具體繪製代碼，實際應用時應補全或呼叫 util
-        # (在此僅為結構示意，若需完整功能需補齊)
-        pass
+        """繪製放大鏡效果"""
+        # 先回復原始圖片（清除上一次的放大鏡）並重繪點位
+        tmp_disp = img.copy()
+        for i, pt in enumerate(points):
+            cv2.circle(tmp_disp, pt, 5, (0, 0, 255), -1)
+            cv2.putText(tmp_disp, f"{i+1}", (pt[0]+5, pt[1]-5),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+
+        # 放大鏡參數
+        zoom_size = 150
+        zoom_factor = 3
+        
+        # 計算區域
+        half_region = zoom_size // (2 * zoom_factor)
+        y1, y2 = max(0, y - half_region), min(img.shape[0], y + half_region)
+        x1, x2 = max(0, x - half_region), min(img.shape[1], x + half_region)
+        
+        roi = img[y1:y2, x1:x2]
+        if roi.size > 0:
+            zoomed = cv2.resize(roi, (zoom_size, zoom_size), interpolation=cv2.INTER_LINEAR)
+            center = zoom_size // 2
+            cv2.line(zoomed, (center, 0), (center, zoom_size), (0, 255, 0), 1)
+            cv2.line(zoomed, (0, center), (zoom_size, center), (0, 255, 0), 1)
+            
+            mag_x, mag_y = x + 20, y + 20
+            if mag_x + zoom_size > img.shape[1]: mag_x = x - zoom_size - 20
+            if mag_y + zoom_size > img.shape[0]: mag_y = y - zoom_size - 20
+            
+            mag_x, mag_y = max(0, min(mag_x, img.shape[1] - zoom_size)), max(0, min(mag_y, img.shape[0] - zoom_size))
+            tmp_disp[mag_y:mag_y+zoom_size, mag_x:mag_x+zoom_size] = zoomed
+            cv2.rectangle(tmp_disp, (mag_x, mag_y), (mag_x+zoom_size, mag_y+zoom_size), (255, 255, 0), 2)
+            
+        cv2.imshow(win_name, tmp_disp)
 
     def _redraw_points(self, img, img_disp, points, win_name):
-        # 重繪點位邏輯
-        pass
+        """重新繪製所有選取的點"""
+        img_disp[:] = img.copy()
+        for i, pt in enumerate(points):
+            cv2.circle(img_disp, pt, 5, (0, 0, 255), -1)
+            cv2.putText(img_disp, f"{i+1}", (pt[0]+5, pt[1]-5),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+        cv2.imshow(win_name, img_disp)
 
     def process_reconstruction(self, vicon_csv: Optional[str] = None):
         """執行重建與對齊流程"""
