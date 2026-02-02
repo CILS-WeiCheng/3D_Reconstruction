@@ -2,8 +2,8 @@ import json
 import numpy as np
 import pandas as pd
 from typing import Dict, List, Optional
-from .config import VICON_MM_TO_M
-from .util import sort_point_keys
+from config import VICON_MM_TO_M
+from util import sort_point_keys
 
 def load_calibration_params(left_path: str, right_path: str, stereo_path: str) -> Dict[str, np.ndarray]:
     """載入單目與雙目校正參數"""
@@ -26,7 +26,8 @@ def load_points_json(json_path: str) -> Dict[str, Dict[str, List[int]]]:
         return json.load(f)
 
 def save_points_json(points: Dict, json_path: str) -> None:
-    """將點位座標儲存為 JSON"""
+    """將點位座標儲存為 JSON，並自動建立中間目錄"""
+    os.makedirs(os.path.dirname(json_path), exist_ok=True)
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(points, f, indent=4, ensure_ascii=False)
 
