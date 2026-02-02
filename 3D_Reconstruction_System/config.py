@@ -26,9 +26,9 @@ MANUAL_POINTS_JSON = os.path.join(BASE_DIR, "20251125_實驗/court/code_point/co
 ESC_KEY = 27 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
-MIN_POINTS_FOR_SVD = 3 # 對應點數
+MIN_POINTS_FOR_SVD = 3 # SVD對齊的最小點數
 VICON_MM_TO_M = 1000.0 
 
 # 預設模式
-POINTS_MODE = "json"  # 'json' 或 'manual'
-NUM_POINTS = 15
+POINTS_MODE = "json"   # 'json' 或 'manual'
+NUM_POINTS = 15        # 手動選點模式的點數
