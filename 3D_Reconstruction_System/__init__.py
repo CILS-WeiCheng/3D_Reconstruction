@@ -1,2 +1,2 @@
 from stereo_system import StereoVisionSystem
-from config import config
+import config
