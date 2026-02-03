@@ -5,7 +5,6 @@ import os
 import threading
 import io
 
-# 確保可以匯入 bridge
 from config_bridge import GUIConfigBridge
 
 class ConsoleRedirector(io.StringIO):
