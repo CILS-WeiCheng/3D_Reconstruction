@@ -99,6 +99,9 @@ class StereoVisionSystem:
             cv2.circle(tmp_disp, pt, 5, (0, 0, 255), -1)
             cv2.putText(tmp_disp, f"{i+1}", (pt[0]+5, pt[1]-5),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+        
+        # Reset display image to clean state with points
+        img_disp[:] = tmp_disp[:]
 
         # 放大鏡參數
         zoom_size = 150
