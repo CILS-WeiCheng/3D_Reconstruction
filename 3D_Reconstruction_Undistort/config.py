@@ -1,26 +1,26 @@
 import os
 
 # 目錄與路徑設定 (改成自己的參數資料夾)
-BASE_DIR = r"C:\Users\f1410\Desktop\defensive_gap-develop@calibration\3D_coordinate"
-PARAM_DIR = r"C:\Users\f1410\Desktop\defensive_gap-develop@calibration\3D_coordinate\20260114_實驗\標定參數"
+BASE_DIR = r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260204_chessboard_img\court_point\court"
+PARAM_DIR = r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260204_chessboard_img\court_point"
 
 # 相機參數檔案
-LEFT_NPZ = os.path.join(PARAM_DIR, "20260114_left_single.npz")
-RIGHT_NPZ = os.path.join(PARAM_DIR, "20260114_right_single.npz")
-STEREO_NPZ = os.path.join(PARAM_DIR, "stereo_rt.npz")
+LEFT_NPZ = os.path.join(PARAM_DIR, "./left/calibration_result.npz")
+RIGHT_NPZ = os.path.join(PARAM_DIR, "./right/calibration_result.npz")
+STEREO_NPZ = os.path.join(PARAM_DIR, "./stereo/stereo_rt.npz")
 
 # 輸出與資料檔案
-POINTS_JSON = os.path.join(BASE_DIR, "20260114_實驗/court/court_point.json")             # 左右原始圖像對應點
-VICON_CSV = os.path.join(BASE_DIR, "20260114_實驗/Vicon_court/court_15points.csv")       # Vicon 原始資料
+POINTS_JSON = os.path.join(BASE_DIR, "court_point.json") # 左右原始圖像對應點
+VICON_CSV = os.path.join(BASE_DIR, "./Vicon_pointVicon_court_01.csv")       # Vicon 原始資料
 
-RAW_3D_JSON = os.path.join(BASE_DIR, "20260114_實驗/court/court_3Dpoints_Undistort.json")          # 重建後原始 3D 資料
-ALIGNED_3D_JSON = os.path.join(BASE_DIR, "20260114_實驗/court/court_3Dpoints_svd_Undistort.json")  # SVD 對齊後的 3D 資料
-ERROR_PLOT_PATH = os.path.join(BASE_DIR, "20260114_實驗/court/xy_error_plot_Undistort.png")        # 2D 誤差圖
+RAW_3D_JSON = os.path.join(BASE_DIR, "court_3Dpoints_Undistort.json")          # 重建後原始 3D 資料
+ALIGNED_3D_JSON = os.path.join(BASE_DIR, "court_3Dpoints_svd_Undistort.json")  # SVD 對齊後的 3D 資料
+ERROR_PLOT_PATH = os.path.join(BASE_DIR, "xy_error_plot_Undistort.png")        # 2D 誤差圖
 
 # 手動選點設定: 左右圖、儲存的 json 位置
-IMG_L =r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260114_chessboard_img\court\court_img_origin_L.jpg"
-IMG_R =r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260114_chessboard_img\court\court_img_origin_R.jpg"
-MANUAL_POINTS_JSON = os.path.join(BASE_DIR, "20260114_實驗/court/code_point/court_point_Undistort.json")
+IMG_L =r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260204_chessboard_img\court_point\court\court_01_origin_L.jpg"
+IMG_R =r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260204_chessboard_img\court_point\court\court_01_origin_R.jpg"
+MANUAL_POINTS_JSON = os.path.join(BASE_DIR, "court_point_Undistort.json")
 
 # 系統常數
 ESC_KEY = 27 
