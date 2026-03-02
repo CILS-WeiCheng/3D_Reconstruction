@@ -10,15 +10,10 @@ import os
 import sys
 
 # 將 3D_Reconstruction_Undistort 加入路徑以利匯入
-sys.path.append(
-    os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "3D_Reconstruction_Undistort")
-    )
-)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "3D_Reconstruction_Undistort")))
 
 import config
 from stereo_system import StereoVisionSystem
-
 
 class GUIConfigBridge:
     """
