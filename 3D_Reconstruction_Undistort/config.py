@@ -11,7 +11,7 @@ STEREO_NPZ = os.path.join(PARAM_DIR, "./stereo/stereo_rt.npz")
 
 # 輸出與資料檔案
 POINTS_JSON = os.path.join(BASE_DIR, "court_point.json") # 左右原始圖像對應點
-VICON_CSV = os.path.join(BASE_DIR, "./Vicon_point/Vicon_court_01.csv")       # Vicon 原始資料
+VICON_CSV = os.path.join(BASE_DIR, "./Vicon_point/Vicon_court_01.csv")         # Vicon 原始資料
 
 RAW_3D_JSON = os.path.join(BASE_DIR, "court_3Dpoints_Undistort.json")          # 重建後原始 3D 資料
 ALIGNED_3D_JSON = os.path.join(BASE_DIR, "court_3Dpoints_svd_Undistort.json")  # SVD 對齊後的 3D 資料
@@ -27,7 +27,7 @@ ESC_KEY = 27
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 MIN_POINTS_FOR_SVD = 3 # SVD對齊的最小點數
-VICON_MM_TO_M = 1000.0 
+VICON_MM_TO_M = 1000.0
 
 # 預設模式
 POINTS_MODE = "manual"   # 'json' 或 'manual'
