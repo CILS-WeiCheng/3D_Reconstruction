@@ -58,7 +58,7 @@ class StereoVisionSystem:
         """根據優化後的新相機矩陣，對原始影像進行完整去畸變處理"""
         print("--- 執行影像預去畸變 ---")
         if img_L_raw is None:
-            img_L_raw = util.imread_unicode(config.IMG_L)
+            img_L_raw = util.imread_unicode(config.IMG_L) 
         img_R_raw = util.imread_unicode(config.IMG_R)
         
         # 使用優化後的 new_mtxL/R 作為 newCameraMatrix
