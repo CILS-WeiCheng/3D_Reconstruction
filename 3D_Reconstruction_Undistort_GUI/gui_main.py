@@ -92,7 +92,7 @@ class ReconstructionUndistortGUI:
             'POINTS_JSON': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
                 r"\20260204_chessboard_img\court_point"
-                r"\court\court_point.json"
+                r"\court\court_point_Undistort.json"
             ),
             'VICON_CSV': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
@@ -114,15 +114,15 @@ class ReconstructionUndistortGUI:
                 r"\20260204_chessboard_img\court_point"
                 r"\court\xy_error_plot_Undistort.png"
             ),
-            'IMG_L': (
+            'VIDEO_L': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
                 r"\20260204_chessboard_img\court_point"
-                r"\court\court_01_origin_L.jpg"
+                r"\court\court_01_origin_L.mp4"
             ),
-            'IMG_R': (
+            'VIDEO_R': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
                 r"\20260204_chessboard_img\court_point"
-                r"\court\court_01_origin_R.jpg"
+                r"\court\court_01_origin_R.mp4"
             ),
             'MANUAL_POINTS_JSON': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
@@ -169,10 +169,10 @@ class ReconstructionUndistortGUI:
             file_frame, "VICON_CSV", "VICON 已標註之 3D點 (.csv)"
         )
         self._add_path_row(
-            file_frame, "IMG_L", "左原始圖像 (去畸變用)"
+            file_frame, "VIDEO_L", "左影片 (取第1幀去畸變)"
         )
         self._add_path_row(
-            file_frame, "IMG_R", "右原始圖像 (去畸變用)"
+            file_frame, "VIDEO_R", "右影片 (取第1幀去畸變)"
         )
 
         # ========== 下方：設定與模式區 ==========
