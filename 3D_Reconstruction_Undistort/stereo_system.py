@@ -27,8 +27,8 @@ class StereoVisionSystem:
         print("--- 載入校正參數 ---")
         self.params = data_io.load_calibration_params(*self.calib_paths)
         
-        # 讀取左圖以取得影像尺寸
-        img_L_raw = util.imread_unicode(config.IMG_L)
+        # 從左影片擷取第一幀以取得影像尺寸
+        img_L_raw = util.extract_frame_from_video(config.VIDEO_L)
         h, w = img_L_raw.shape[:2]
         
         # 1. 計算優化的新相機矩陣 (Alpha=0 表示只保留有效像素，不留黑邊)
@@ -58,8 +58,8 @@ class StereoVisionSystem:
         """根據優化後的新相機矩陣，對原始影像進行完整去畸變處理"""
         print("--- 執行影像預去畸變 ---")
         if img_L_raw is None:
-            img_L_raw = util.imread_unicode(config.IMG_L) 
-        img_R_raw = util.imread_unicode(config.IMG_R)
+            img_L_raw = util.extract_frame_from_video(config.VIDEO_L)
+        img_R_raw = util.extract_frame_from_video(config.VIDEO_R)
         
         # 使用優化後的 new_mtxL/R 作為 newCameraMatrix
         # 這樣去畸變後的座標空間與我們建構 P_L/R 時使用的 K 矩陣一致
