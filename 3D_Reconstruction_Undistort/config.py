@@ -17,9 +17,9 @@ RAW_3D_JSON = os.path.join(BASE_DIR, "court_3Dpoints_Undistort.json")          #
 ALIGNED_3D_JSON = os.path.join(BASE_DIR, "court_3Dpoints_svd_Undistort.json")  # SVD 對齊後的 3D 資料
 ERROR_PLOT_PATH = os.path.join(BASE_DIR, "xy_error_plot_Undistort.png")        # 2D 誤差圖
 
-# 手動選點設定: 左右圖、儲存的 json 位置
-IMG_L =r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260204_chessboard_img\court_point\court\court_01_origin_L.jpg"
-IMG_R =r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260204_chessboard_img\court_point\court\court_01_origin_R.jpg"
+# 影片輸入設定: 左右影片、儲存的 json 位置
+VIDEO_L = r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260204_chessboard_img\court_point\court\court_01_origin_L.mp4"
+VIDEO_R = r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260204_chessboard_img\court_point\court\court_01_origin_R.mp4"
 MANUAL_POINTS_JSON = os.path.join(BASE_DIR, "court_point_Undistort.json")
 
 # 系統常數
