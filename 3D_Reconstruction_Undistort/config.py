@@ -1,7 +1,7 @@
 import os
 
 # 目錄與路徑設定 (改成自己的參數資料夾)
-BASE_DIR = r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260204_chessboard_img\court_point\court_01"
+BASE_DIR = r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260204_chessboard_img\court_point"
 PARAM_DIR = r"C:\Users\f1410\Desktop\vicon_chessbord_img\20260204_chessboard_img\court_point\camera_parm"
 
 # 相機參數檔案
@@ -10,7 +10,7 @@ RIGHT_NPZ = os.path.join(PARAM_DIR, "./calibration_right.npz")
 STEREO_NPZ = os.path.join(PARAM_DIR, "./stereo_rt.npz")
 
 # 輸出與資料檔案
-POINTS_JSON = os.path.join(BASE_DIR, "court_point.json")                       # 左右原始圖像對應點
+POINTS_JSON = os.path.join(BASE_DIR, "court_point_Undistort.json")             # 左右原始圖像對應點
 VICON_CSV = os.path.join(BASE_DIR, "./Vicon_point/Vicon_court_01.csv")         # Vicon 原始資料
 
 RAW_3D_JSON = os.path.join(BASE_DIR, "court_3Dpoints_Undistort.json")          # 重建後原始 3D 資料
