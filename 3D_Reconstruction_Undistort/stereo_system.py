@@ -172,7 +172,7 @@ class StereoVisionSystem:
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
         cv2.imshow(win_name, img_disp)
 
-    def process_reconstruction(self, vicon_csv: Optional[str] = None):
+    def process_reconstruction(self, vicon_csv: Optional[str] = None, use_synthetic_court: bool = False, show_plot: bool = True):
         """執行重建與對齊流程"""
         # 1. 三角測量 (傳入 is_undistorted=True，因為點位是在去畸變影像上選取的)
         print("--- 執行三角測量 ---")
@@ -184,22 +184,55 @@ class StereoVisionSystem:
         )
         data_io.save_points_json(self.raw_3d_points, config.RAW_3D_JSON)
 
-        # 2. 座標對齊 (若有 VICON 資料)
+        # 2. 座標對齊
+        sorted_keys = util.sort_point_keys(list(self.raw_3d_points.keys()))
+        
+        # 定義兩個變數，一個用於 SVD 轉換基準，一個用於最後的誤差比較基準
+        alignment_target_points = {}
+        error_calc_ground_truth = None
+        
+        # 若有提供 VICON CSV，就先載入備用 (作為誤差比較的 Ground Truth)
         if vicon_csv:
-            print("--- 執行座標對齊 ---")
-            sorted_keys = util.sort_point_keys(list(self.raw_3d_points.keys()))
-            self.vicon_3d_points = data_io.load_vicon_csv(vicon_csv, sorted_keys)
-            
-            common_keys = util.sort_point_keys([k for k in self.raw_3d_points if k in self.vicon_3d_points])
-            if len(common_keys) >= config.MIN_POINTS_FOR_SVD:
-                A = np.array([self.raw_3d_points[k] for k in common_keys]).T
-                B = np.array([self.vicon_3d_points[k] for k in common_keys]).T
-                R, t = core_math.rigid_transform_3D(A, B)
-                self.aligned_points = core_math.apply_alignment(self.raw_3d_points, R, t)
-                data_io.save_points_json(self.aligned_points, config.ALIGNED_3D_JSON)
+            error_calc_ground_truth = data_io.load_vicon_csv(vicon_csv, sorted_keys)
+
+        if use_synthetic_court:
+            print("--- 使用標準虛擬球場執行座標對齊 ---")
+            for key in sorted_keys:
+                if key in config.STANDARD_COURT_3D:
+                    alignment_target_points[key] = config.STANDARD_COURT_3D[key]
+                else:
+                    print(f"警告：找不到 {key} 的標準坐標，將不參與 SVD 運算")
+                    
+            # 如果沒有 Vicon 資料，則把虛擬球場也當作誤差比較的 Ground Truth
+            if error_calc_ground_truth is None:
+                error_calc_ground_truth = alignment_target_points
                 
-                # 3. 視覺化
-                visualizer.print_error_report(self.aligned_points, self.vicon_3d_points, common_keys)
-                visualizer.plot_2d_comparison(self.aligned_points, self.vicon_3d_points, common_keys, config.ERROR_PLOT_PATH)
+        elif vicon_csv:
+            print("--- 使用 Vicon 資料執行座標對齊 ---")
+            alignment_target_points = error_calc_ground_truth
+        else:
+            print("沒有提供 Vicon 資料或啟用虛擬球場，跳過對齊。")
+            return
+            
+        common_keys = util.sort_point_keys([k for k in self.raw_3d_points if k in alignment_target_points])
+        if len(common_keys) >= config.MIN_POINTS_FOR_SVD:
+            A = np.array([self.raw_3d_points[k] for k in common_keys]).T
+            B = np.array([alignment_target_points[k] for k in common_keys]).T
+            R, t = core_math.rigid_transform_3D(A, B)
+            data_io.save_svd_rt(R, t, config.SVD_RT_NPZ)
+            self.aligned_points = core_math.apply_alignment(self.raw_3d_points, R, t)
+            data_io.save_points_json(self.aligned_points, config.ALIGNED_3D_JSON)
+            self.vicon_3d_points = alignment_target_points # 為了相容其他可能的外部讀取
+            
+            # 3. 視覺化 (使用 error_calc_ground_truth 進行誤差比較)
+            error_keys = util.sort_point_keys([k for k in self.aligned_points if k in error_calc_ground_truth])
+            if error_calc_ground_truth and len(error_keys) > 0:
+                print("\n--- 執行誤差分析 ---")
+                if use_synthetic_court and vicon_csv:
+                    print("(提示: 使用虛擬球場對齊，但用 Vicon 數據作為誤差評估標準)")
+                visualizer.print_error_report(self.aligned_points, error_calc_ground_truth, error_keys)
+                visualizer.plot_2d_comparison(self.aligned_points, error_calc_ground_truth, error_keys, config.ERROR_PLOT_PATH, show_plot=show_plot)
             else:
-                print("共同點不足，跳過 SVD 對齊。")
+                print("無法進行誤差分析：找不到對應的比較資料。")
+        else:
+            print("共同點不足，跳過 SVD 對齊。")

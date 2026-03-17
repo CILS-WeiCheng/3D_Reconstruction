@@ -30,7 +30,11 @@ def example_stereo_reconstruction_undistort():
         )
     
     # 4. 執行重建與誤差分析 (內部會跳過單點去畸變步驟)
-    system.process_reconstruction(vicon_csv=config.VICON_CSV)
+    # 即使 USE_VICON 為 False，也可以傳入 VICON_CSV 作為最後誤差比較的 Ground Truth
+    system.process_reconstruction(
+        vicon_csv=getattr(config, 'VICON_CSV', None), 
+        use_synthetic_court=config.USE_SYNTHETIC_COURT
+    )
     
     print("=== 範例執行結束 ===")
 

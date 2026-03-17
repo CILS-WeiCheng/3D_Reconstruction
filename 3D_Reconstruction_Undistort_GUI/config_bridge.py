@@ -77,9 +77,21 @@ class GUIConfigBridge:
             )
 
         # 3. 執行重建與誤差分析
+        alignment_mode = self.params.get('ALIGNMENT_MODE', 'synthetic')
+        
+        # 讀取 VICON_CSV 路徑 (不論在哪種模式，只要有提供路徑就可以用作誤差比較)
         vicon_path = self.params.get('VICON_CSV')
-        # 若 VICON 路徑為空，傳入 None 以跳過座標對齊
-        if not vicon_path or vicon_path.strip() == "":
+        if vicon_path and vicon_path.strip() == "":
             vicon_path = None
+            
+        use_synthetic_court = (alignment_mode == 'synthetic')
+        
+        # 在 GUI 背景執行緒中，我們不彈出 Matplotlib 視窗，以免當機
+        import config
+        show_plot_in_gui = False
 
-        self.system.process_reconstruction(vicon_csv=vicon_path)
+        self.system.process_reconstruction(
+            vicon_csv=vicon_path,
+            use_synthetic_court=use_synthetic_court,
+            show_plot=show_plot_in_gui
+        )

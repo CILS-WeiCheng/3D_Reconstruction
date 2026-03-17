@@ -10,13 +10,12 @@ gui_main.py — 3D 重建系統 (先去畸變版本) 的 GUI 主程式
 """
 
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
 import sys
 import os
 import threading
 import io
-
 from config_bridge import GUIConfigBridge
+from tkinter import ttk, filedialog, messagebox
 
 
 class ConsoleRedirector(io.StringIO):
@@ -76,61 +75,67 @@ class ReconstructionUndistortGUI:
         self.params = {
             'LEFT_NPZ': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point"
-                r"\left\calibration_result.npz"
+                r"\20260204_chessboard_img\court_point\camera_parm"
+                r"\calibration_left.npz"
             ),
             'RIGHT_NPZ': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point"
-                r"\right\calibration_result.npz"
+                r"\20260204_chessboard_img\court_point\camera_parm"
+                r"\calibration_right.npz"
             ),
             'STEREO_NPZ': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point"
-                r"\stereo\stereo_rt.npz"
+                r"\20260204_chessboard_img\court_point\camera_parm"
+                r"\stereo_rt.npz"
             ),
             'POINTS_JSON': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point"
-                r"\court\court_point_Undistort.json"
+                r"\20260204_chessboard_img\court_point\court\code_point"
+                r"\court_01\court_point_Undistort.json"
             ),
             'VICON_CSV': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point"
-                r"\court\Vicon_point\Vicon_court_01.csv"
+                r"\20260204_chessboard_img\court_point\court\Vicon_point"
+                r"\Vicon_court_01.csv"
             ),
             'RAW_3D_JSON': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point"
-                r"\court\court_3Dpoints_Undistort.json"
+                r"\20260204_chessboard_img\court_point\court\code_point"
+                r"\court_01\court_3Dpoints_Undistort.json"
             ),
             'ALIGNED_3D_JSON': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point"
-                r"\court\court_3Dpoints_svd_Undistort.json"
+                r"\20260204_chessboard_img\court_point\court\code_point"
+                r"\court_01\court_3Dpoints_svd_Undistort.json"
+            ),
+            'SVD_RT_NPZ': (
+                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
+                r"\20260204_chessboard_img\court_point\court\code_point"
+                r"\court_01\svd_rt_Undistort.npz"
             ),
             'ERROR_PLOT_PATH': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point"
-                r"\court\xy_error_plot_Undistort.png"
+                r"\20260204_chessboard_img\court_point\court\code_point"
+                r"\court_01\xy_error_plot_Undistort.png"
             ),
             'VIDEO_L': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point"
-                r"\court\court_01_origin_L.mp4"
+                r"\20260204_chessboard_img\court_point\court"
+                r"\court_01_origin_L.mp4"
             ),
             'VIDEO_R': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point"
-                r"\court\court_01_origin_R.mp4"
+                r"\20260204_chessboard_img\court_point\court"
+                r"\court_01_origin_R.mp4"
             ),
             'MANUAL_POINTS_JSON': (
                 r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point"
-                r"\court\court_point_Undistort.json"
+                r"\20260204_chessboard_img\court_point\court\code_point"
+                r"\court_01\court_point_Undistort.json"
             ),
             'POINTS_MODE': 'manual',
-            'NUM_POINTS': '15'
+            'NUM_POINTS': '15',
+            'ALIGNMENT_MODE': 'synthetic'
         }
 
         self.entries = {}
@@ -205,6 +210,31 @@ class ReconstructionUndistortGUI:
             variable=self.mode_var, value="manual"
         ).pack(side=tk.LEFT, padx=10)
 
+        # 座標對齊模式
+        ttk.Label(
+            settings_frame,
+            text="座標對齊模式 (ALIGNMENT_MODE):"
+        ).pack(anchor=tk.W, pady=(5, 0))
+
+        self.align_mode_var = tk.StringVar(value=self.params.get('ALIGNMENT_MODE', 'synthetic'))
+        align_mode_frame = ttk.Frame(settings_frame)
+        align_mode_frame.pack(fill=tk.X, pady=2)
+
+        ttk.Radiobutton(
+            align_mode_frame, text="標準虛擬球場對齊",
+            variable=self.align_mode_var, value="synthetic"
+        ).pack(side=tk.LEFT, padx=10)
+
+        ttk.Radiobutton(
+            align_mode_frame, text="Vicon CSV 對齊",
+            variable=self.align_mode_var, value="vicon"
+        ).pack(side=tk.LEFT, padx=10)
+
+        ttk.Radiobutton(
+            align_mode_frame, text="不對齊",
+            variable=self.align_mode_var, value="none"
+        ).pack(side=tk.LEFT, padx=10)
+
         # 其他設定欄位
         self._add_entry_row(
             settings_frame, "NUM_POINTS", "手動選點數量:"
@@ -217,6 +247,9 @@ class ReconstructionUndistortGUI:
         )
         self._add_path_row(
             settings_frame, "ALIGNED_3D_JSON", "對齊 3D 點儲存路徑"
+        )
+        self._add_path_row(
+            settings_frame, "SVD_RT_NPZ", "對齊 RT 儲存路徑"
         )
         self._add_path_row(
             settings_frame, "ERROR_PLOT_PATH", "誤差圖儲存路徑"
@@ -324,6 +357,7 @@ class ReconstructionUndistortGUI:
         """
         current_params = {k: e.get() for k, e in self.entries.items()}
         current_params['POINTS_MODE'] = self.mode_var.get()
+        current_params['ALIGNMENT_MODE'] = self.align_mode_var.get()
         return current_params
 
     def run_process(self):
@@ -333,17 +367,19 @@ class ReconstructionUndistortGUI:
         def task():
             try:
                 print("\n--- GUI 啟動重建程序 (先去畸變版本) ---")
+                
                 bridge = GUIConfigBridge(params)
                 bridge.run_reconstruction()
                 print("\n--- 程序執行完畢 ---")
-                messagebox.showinfo("成功", "3D 重建處理完成！")
+                
+                # 切回主執行緒顯示成功訊息
+                self.root.after(0, lambda: messagebox.showinfo("成功", "3D 重建處理完成！\n誤差圖已儲存。"))
             except Exception as e:
                 import traceback
                 print(f"\n發生錯誤: {str(e)}")
                 print(traceback.format_exc())
-                messagebox.showerror(
-                    "錯誤", f"執行過程中發生錯誤:\n{str(e)}"
-                )
+                # 切回主執行緒顯示錯誤訊息
+                self.root.after(0, lambda: messagebox.showerror("錯誤", f"執行過程中發生錯誤:\n{str(e)}"))
 
         thread = threading.Thread(target=task)
         thread.daemon = True

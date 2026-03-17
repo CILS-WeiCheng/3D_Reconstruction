@@ -6,7 +6,8 @@ def plot_2d_comparison(
     aligned_points: Dict[str, List[float]],
     vicon_points: Dict[str, List[float]],
     common_keys: List[str],
-    save_path: str = None
+    save_path: str = None,
+    show_plot: bool = True
 ) -> None:
     """繪製 2D (X-Y) 座標對比圖"""
     calc_xy = np.array([aligned_points[k][:2] for k in common_keys])
@@ -31,7 +32,10 @@ def plot_2d_comparison(
     if save_path:
         plt.savefig(save_path, dpi=300)
     
-    plt.show(block=True)
+    if show_plot:
+        plt.show(block=True)
+    else:
+        plt.close('all')
 
 def print_error_report(
     aligned_points: Dict[str, List[float]],
