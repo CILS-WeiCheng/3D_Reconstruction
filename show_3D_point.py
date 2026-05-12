@@ -97,7 +97,7 @@ if __name__ == '__main__':
     # 讀取 3D 點數據
     # json_file = './20260114_實驗/court/court_3Dpoints_svd.json'
     # json_file = './20260114_實驗/3D_height_check_back/code_point/3D_points.json'
-    json_file = r"C:\Users\f1410\Desktop\CILS\3D重建\System\beta_v0\landing point\court_points\20260430_court_point\court_3Dpoints_Undistort.json"
+    json_file = r"C:\Users\f1410\Desktop\CILS\3D重建\System\beta_v0\landing point\court_points\20260507_court_point\01\標準球場對齊\court_3Dpoints_Undistort.json"
     points, labels = load_3d_points(json_file)
     
     print(f"成功載入 {len(points)} 個 3D 點")
