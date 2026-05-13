@@ -13,10 +13,14 @@ def load_calibration_params(left_path: str, right_path: str, stereo_path: str) -
     stereo_data = np.load(stereo_path, allow_pickle=True)
     
     return {
-        "mtxL": left_data["camera_matrix"],
-        "distL": left_data["dist_coeffs"],
-        "mtxR": right_data["camera_matrix"],
-        "distR": right_data["dist_coeffs"],
+        # "mtxL": left_data["camera_matrix"],
+        # "distL": left_data["dist_coeffs"],
+        # "mtxR": right_data["camera_matrix"],
+        # "distR": right_data["dist_coeffs"],       
+        "mtxL": left_data["mtxL_opt"],
+        "distL": left_data["distL_opt"],
+        "mtxR": right_data["mtxR_opt"],
+        "distR": right_data["distR_opt"],
         "R": stereo_data["R"],
         "T": stereo_data["T"]
     }
