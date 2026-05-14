@@ -71,72 +71,25 @@ class ReconstructionUndistortGUI:
             font=("Microsoft JhengHei", 12, "bold")
         )
 
-        # 初始化參數字典（預設值取自 Undistort 版 config.py）
+        # 初始化參數字典（路徑由使用者於 GUI 中填入）
         self.params = {
-            'LEFT_NPZ': (
-                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point\camera_parm"
-                r"\calibration_left.npz"
-            ),
-            'RIGHT_NPZ': (
-                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point\camera_parm"
-                r"\calibration_right.npz"
-            ),
-            'STEREO_NPZ': (
-                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point\camera_parm"
-                r"\stereo_rt.npz"
-            ),
-            'POINTS_JSON': (
-                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point\court\code_point"
-                r"\court_01\court_point_Undistort.json"
-            ),
-            'VICON_CSV': (
-                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point\court\Vicon_point"
-                r"\Vicon_court_01.csv"
-            ),
-            'RAW_3D_JSON': (
-                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point\court\code_point"
-                r"\court_01\court_3Dpoints_Undistort.json"
-            ),
-            'ALIGNED_3D_JSON': (
-                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point\court\code_point"
-                r"\court_01\court_3Dpoints_svd_Undistort.json"
-            ),
-            'SVD_RT_NPZ': (
-                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point\court\code_point"
-                r"\court_01\svd_rt_Undistort.npz"
-            ),
-            'ERROR_PLOT_PATH': (
-                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point\court\code_point"
-                r"\court_01\xy_error_plot_Undistort.png"
-            ),
-            'VIDEO_L': (
-                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point\court"
-                r"\court_01_origin_L.mp4"
-            ),
-            'VIDEO_R': (
-                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point\court"
-                r"\court_01_origin_R.mp4"
-            ),
-            'MANUAL_POINTS_JSON': (
-                r"C:\Users\f1410\Desktop\vicon_chessbord_img"
-                r"\20260204_chessboard_img\court_point\court\code_point"
-                r"\court_01\court_point_Undistort.json"
-            ),
+            'LEFT_NPZ': '',
+            'RIGHT_NPZ': '',
+            'STEREO_NPZ': '',
+            'POINTS_JSON': '',
+            'VICON_CSV': '',
+            'RAW_3D_JSON': r'\court_point_Undistort.json',
+            'ALIGNED_3D_JSON': r'\court_3Dpoints_Undistort.json',
+            'SVD_RT_NPZ': r'\svd_rt_Undistort.npz',
+            'ERROR_PLOT_PATH': r'\xy_error_plot_Undistort.png',
+            'VIDEO_L': '',
+            'VIDEO_R': '',
+            'MANUAL_POINTS_JSON': r'\court_point_Undistort.json',
             'POINTS_MODE': 'manual',
             'NUM_POINTS': '15',
             'ALIGNMENT_MODE': 'synthetic'
         }
+
 
         self.entries = {}
         self._build_ui()
