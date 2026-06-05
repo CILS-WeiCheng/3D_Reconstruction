@@ -46,6 +46,10 @@ class StereoVisionSystem:
         self.P_L = self.new_mtxL @ np.hstack((np.eye(3), np.zeros((3, 1))))
         # 右相機相對位置 [R|T]
         self.P_R = self.new_mtxR @ np.hstack((self.params['R'], self.params['T']))
+
+        # 新增尺度縮放比例
+        corrected_T = self.params['T'] * 0.97109
+        self.P_R = self.new_mtxR @ np.hstack((self.params['R'], corrected_T))
         
         print(f"Baseline: {np.linalg.norm(self.params['T']):.4f} m")
         print("投影矩陣建構完成。")
