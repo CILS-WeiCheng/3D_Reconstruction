@@ -38,6 +38,9 @@ NUM_POINTS = 15          # 手動選點模式的點數
 USE_VICON = False              # 是否使用 Vicon 真實資料進行 SVD 對齊
 USE_SYNTHETIC_COURT = True     # 是否使用虛擬球場座標進行 SVD 對齊 (若 USE_VICON 為 True，則優先使用 Vicon)
 
+# 雙目相機外參平移向量 T 的尺度修正因子 (從 SVD 對齊診斷中獲得的最佳縮放比例)
+SCALE_FACTOR = 0.96474
+
 # 視覺化設定
 SHOW_PLOT = True               # 是否在執行完畢後彈出誤差圖視窗 (GUI 模式下建議設為 False)
 
