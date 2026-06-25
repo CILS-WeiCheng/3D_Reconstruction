@@ -78,8 +78,8 @@ class ReconstructionUndistortGUI:
             'STEREO_NPZ': '',
             'POINTS_JSON': '',
             'VICON_CSV': '',
-            'RAW_3D_JSON': r'\court_point_Undistort.json',
-            'ALIGNED_3D_JSON': r'\court_3Dpoints_Undistort.json',
+            'RAW_3D_JSON': r'\court_3Dpoint_Undistort.json',
+            'ALIGNED_3D_JSON': r'\court_3Dpoints_svd_Undistort.json',
             'SVD_RT_NPZ': r'\svd_rt_Undistort.npz',
             'ERROR_PLOT_PATH': r'\xy_error_plot_Undistort.png',
             'VIDEO_L': '',
@@ -329,10 +329,11 @@ class ReconstructionUndistortGUI:
                 self.root.after(0, lambda: messagebox.showinfo("成功", "3D 重建處理完成！\n誤差圖已儲存。"))
             except Exception as e:
                 import traceback
-                print(f"\n發生錯誤: {str(e)}")
+                err_msg = str(e)
+                print(f"\n發生錯誤: {err_msg}")
                 print(traceback.format_exc())
                 # 切回主執行緒顯示錯誤訊息
-                self.root.after(0, lambda: messagebox.showerror("錯誤", f"執行過程中發生錯誤:\n{str(e)}"))
+                self.root.after(0, lambda: messagebox.showerror("錯誤", f"執行過程中發生錯誤:\n{err_msg}"))
 
         thread = threading.Thread(target=task)
         thread.daemon = True
