@@ -46,8 +46,8 @@ def triangulate_points(
         
     return raw_3d_points
 
-def rigid_transform_3D(A: np.ndarray, B: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-    """計算最佳的剛體轉換 (Rotation & Translation)"""
+def rigid_transform_3D(A: np.ndarray, B: np.ndarray) -> Tuple[np.ndarray, np.ndarray, float]:
+    """計算最佳的剛體轉換 (Rotation & Translation) 並且額外返回最佳縮放比例"""
     assert A.shape == B.shape
     
     centroid_A = np.mean(A, axis=1, keepdims=True)
@@ -68,7 +68,7 @@ def rigid_transform_3D(A: np.ndarray, B: np.ndarray) -> Tuple[np.ndarray, np.nda
     t = centroid_B - R @ centroid_A
     
     # 額外計算最佳縮放比例 (僅供診斷輸出，不實際套用於剛體轉換)
-    s = np.sum(S) / np.sum(Am**2)
+    s = float(np.sum(S) / np.sum(Am**2))
     print(f"\n[SVD 診斷] 最佳縮放比例 (Scale): {s:.5f}")
     if abs(s - 1.0) > 0.005:
         print(f"⚠️ 警告: 縮放比例偏離 1.0 超過 0.5%！")
@@ -76,7 +76,7 @@ def rigid_transform_3D(A: np.ndarray, B: np.ndarray) -> Tuple[np.ndarray, np.nda
         print("在 13.4 公尺長的球場上，這會直接產生近 10 公分以上的『假性誤差』。")
         print("👉 請重新確認『相機標定時的棋盤格 square_size 輸入』或是『雙目標定的 baseline T 尺度』是否精確！")
     
-    return R, t
+    return R, t, s
 
 def apply_alignment(raw_points: Dict[str, List[float]], R: np.ndarray, t: np.ndarray) -> Dict[str, List[float]]:
     """應用座標對齊轉換"""
