@@ -54,8 +54,11 @@ def load_vicon_csv(csv_path: str, point_keys: List[str]) -> Dict[str, List[float
             
     return vicon_points
 
-def save_svd_rt(R: np.ndarray, t: np.ndarray, npz_path: str) -> None:
-    """儲存 SVD 計算出的旋轉(R)與平移(t)矩陣為 npz 檔案"""
+def save_svd_rt(R: np.ndarray, t: np.ndarray, npz_path: str, scale: Optional[float] = None) -> None:
+    """儲存 SVD 計算出的旋轉(R)、平移(t)與最佳縮放比例為 npz 檔案"""
     os.makedirs(os.path.dirname(npz_path), exist_ok=True)
-    np.savez(npz_path, R=R, T=t)
+    if scale is not None:
+        np.savez(npz_path, R=R, T=t, scale=scale)
+    else:
+        np.savez(npz_path, R=R, T=t)
     print(f"SVD RT 參數已成功儲存至 {npz_path}")
