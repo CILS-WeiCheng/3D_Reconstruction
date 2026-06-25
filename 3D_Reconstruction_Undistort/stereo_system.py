@@ -48,7 +48,7 @@ class StereoVisionSystem:
         self.P_R = self.new_mtxR @ np.hstack((self.params['R'], self.params['T']))
 
         # 新增尺度縮放比例
-        corrected_T = self.params['T'] * 0.97109
+        corrected_T = self.params['T'] * config.SCALE_FACTOR
         self.P_R = self.new_mtxR @ np.hstack((self.params['R'], corrected_T))
         
         print(f"Baseline: {np.linalg.norm(self.params['T']):.4f} m")
@@ -222,8 +222,8 @@ class StereoVisionSystem:
         if len(common_keys) >= config.MIN_POINTS_FOR_SVD:
             A = np.array([self.raw_3d_points[k] for k in common_keys]).T
             B = np.array([alignment_target_points[k] for k in common_keys]).T
-            R, t = core_math.rigid_transform_3D(A, B)
-            data_io.save_svd_rt(R, t, config.SVD_RT_NPZ)
+            R, t, s = core_math.rigid_transform_3D(A, B)
+            data_io.save_svd_rt(R, t, config.SVD_RT_NPZ, scale=s)
             self.aligned_points = core_math.apply_alignment(self.raw_3d_points, R, t)
             data_io.save_points_json(self.aligned_points, config.ALIGNED_3D_JSON)
             self.vicon_3d_points = alignment_target_points # 為了相容其他可能的外部讀取
